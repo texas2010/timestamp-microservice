@@ -26,6 +26,11 @@ app.get("/api/hello", function (req, res) {
   res.json({ greeting: 'hello API' });
 });
 
+app.get('/api/timestamp/', (req, res) => {
+  const currentTime = new Date()
+  res.json({ unix: Date.parse(currentTime), utc: currentTime.toUTCString() })
+})
+
 app.get('/api/timestamp/:date', (req, res) => {
   const isNumeric = (str) => {
     if (typeof str !== "string") return false
