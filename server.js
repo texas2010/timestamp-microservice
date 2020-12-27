@@ -27,10 +27,47 @@ app.get("/api/hello", function (req, res) {
 });
 
 app.get('/api/timestamp/:date', (req, res) => {
-  res.json({  });
+  const isNumeric = (str) => {
+    if (typeof str !== "string") return false
+    return !isNaN(str) && !isNaN(parseFloat(str))
+  }
+  const convertDate = (date) => {
+    const dateObj = new Date(date)
+    return { unix: Date.parse(dateObj), utc: dateObj.toUTCString() }
+  }
+  const rawDate = req.params.date
+
+  // function isNumeric(str) {
+  //   if (typeof str != "string") return false
+  //   return !isNaN(str) && !isNaN(parseFloat(str))
+  // }
+
+  // function convertTime(date) {
+  //   const dateObj = new Date(date)
+  //   const utc = dateObj.toUTCString()
+  //   const unix = Date.parse(dateObj)
+  //   return { unix: unix, utc: utc }
+  // }
+
+  if (isNumeric(rawDate) && (new Date(parseInt(rawDate))).getTime() > 0) {
+    res.json(convertDate(parseInt(rawDate)))
+  } else if ((new Date(rawDate)).getTime() > 0) {
+    res.json(convertDate(rawDate))
+  } else {
+    res.json({ error: 'Invalid Date' })
+  }
 })
 
+// milliseconds to date
+// const dateNumber = parseInt(rawDate)
+// const dateObj = new Date(dateNumber)
+// const utc = dateObj.toUTCString()
+// const unix = Date.parse(dateObj)
 
+// date to milliseconds
+// const dateObj = new Date(rawDate)
+// const utc = dateObj.toUTCString()
+// const unix = Date.parse(dateObj)
 
 // listen for requests :)
 var listener = app.listen(process.env.PORT, function () {
